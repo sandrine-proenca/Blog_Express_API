@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS public.articles;
 CREATE TABLE IF NOT EXISTS public.articles
 (
     id integer NOT NULL DEFAULT nextval('articles_id_seq'::regclass),
-    chonicle character varying COLLATE pg_catalog."default" NOT NULL,
+    chronicle character varying COLLATE pg_catalog."default",
     create_date date,
     deleted_date date,
     user_id integer NOT NULL,
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS public.comments
 (
     id integer NOT NULL DEFAULT nextval('comment_id_seq'::regclass),
     message character varying COLLATE pg_catalog."default",
-    "cratedDate" date,
-    "deletedDate" date,
+    created_date date,
+    deleted_date date,
     article_id integer,
     user_id integer,
     CONSTRAINT comment_pkey PRIMARY KEY (id)
