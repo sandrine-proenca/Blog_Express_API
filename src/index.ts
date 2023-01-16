@@ -1,6 +1,6 @@
 // imports
-import * as express from 'express';
 import * as dotenv from 'dotenv';
+import express = require('express');
 import { JwtPayload } from 'jsonwebtoken';
 
 declare global
@@ -28,7 +28,7 @@ app.use(express.json());
 
 
 // Add headers before the routes are defined
-app.use(function (req, res, next)
+app.use(function (req: express.Request, res: express.Response, next)
 {
 
     res.setHeader('authorization', '');

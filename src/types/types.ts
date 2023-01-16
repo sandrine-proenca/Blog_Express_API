@@ -10,3 +10,12 @@ interface HeaderWithAuthorization extends Headers
 {
     authorization?: JwtPayload
 }
+
+export type TStatus = 'OK' | 'FAILED'
+
+export enum EStatus {
+    OK = 'OK',
+    FAILED = 'FAILED'
+}
+
+const test: EStatus = EStatus.FAILED
