@@ -123,12 +123,14 @@ export class ArticlesController
     };
 
     // modification de l'article (par le user_id)
-    async putArticles(req: Request, res: Response){
+    async putArticles(req: Request, res: Response)
+    {
         const chronicle = req.body;
         const id = req.params.id;
         const userId = parseInt(req.userId);
         // message d'erreur pour un chronicle inexistant
-        if (chronicle === undefined || typeof chronicle !== typeof String()){
+        if (chronicle === undefined || typeof chronicle !== typeof String())
+        {
             res.status(403).json({
                 status: "FAILED",
                 message: "Obligation d'avoir un chronicle en format string",
@@ -137,9 +139,11 @@ export class ArticlesController
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un chronicle en format string`);
             return;
         };
-        try {
+        try
+        {
             const validArticle = articlesService.getArticlesById(id);
-            if (validArticle && validArticle.user_id !== userId){
+            if (validArticle && validArticle.user_id !== userId)
+            {
                 res.status(403).json({
                     status: "FAILED",
                     message: "Le ticket n'est pas à vous",
@@ -149,7 +153,8 @@ export class ArticlesController
                 return;
             };
             const article = await articlesService.putArticles(id, chronicle, userID);
-            if (validArticle === undefined) {
+            if (validArticle === undefined)
+            {
                 res.status(404).json({
                     status: "FAILED",
                     message: "L'aticle est inexistant",
@@ -165,7 +170,8 @@ export class ArticlesController
             });
             console.log(`${req.method} | ${req.originalUrl} | \nL'article a bien été modifié`);
         }
-        catch (err) {
+        catch (err)
+        {
             res.status(500).json({
                 status: "FAILED",
                 message: "Erreur serveur"
@@ -174,13 +180,16 @@ export class ArticlesController
     };
 
     //suppression d'un article
-    async deleteArticles(req: Request, res: Response){
+    async deleteArticles(req: Request, res: Response)
+    {
         console.log("test deleteArticles", req.body);
         const userId = req.userId;
         const id = parseInt(req.params.id);
-        try {
+        try
+        {
             const article = await articlesService.deleteArticles(id, userId);
-            if(article === undefined){
+            if (article === undefined)
+            {
                 res.status(403).json({
                     status: "FAILED",
                     message: "Il n'y a aucun article",
@@ -196,7 +205,8 @@ export class ArticlesController
             });
             console.log(`${req.method} | ${req.originalUrl} | \nL'article a été supprimé avec succès`);
         }
-        catch (err) {
+        catch (err)
+        {
             res.status(500).json({
                 status: "FAILED",
                 message: "Erreur serveur"
