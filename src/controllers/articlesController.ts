@@ -141,12 +141,66 @@ export class ArticlesController
             const validArticle = articlesService.getArticlesById(id);
             if (validArticle && validArticle.user_id !== userId){
                 res.status(403).json({
-                    status: "FAIL",
-                    message: "Le ticket n'est pas a vous",
+                    status: "FAILED",
+                    message: "Le ticket n'est pas à vous",
                     data: undefined
                 });
+                console.log(`${req.method} | ${req.originalUrl} | \nLe ticket n'est pas à vous`);
                 return;
             };
+            const article = await articlesService.putArticles(id, chronicle, userID);
+            if (validArticle === undefined) {
+                res.status(404).json({
+                    status: "FAILED",
+                    message: "L'aticle est inexistant",
+                    data: undefined
+                });
+                console.log(`${req.method} | ${req.originalUrl} | \nLarticle est inexistant`);
+                return;
+            };
+            res.status(201).json({
+                status: "OK",
+                message: "L'article a bien été modifié",
+                data: validArticle
+            });
+            console.log(`${req.method} | ${req.originalUrl} | \nL'article a bien été modifié`);
         }
-    }
-}
+        catch (err) {
+            res.status(500).json({
+                status: "FAILED",
+                message: "Erreur serveur"
+            });
+        };
+    };
+
+    //suppression d'un article
+    async deleteArticles(req: Request, res: Response){
+        console.log("test deleteArticles", req.body);
+        const userId = req.userId;
+        const id = parseInt(req.params.id);
+        try {
+            const article = await articlesService.deleteArticles(id, userId);
+            if(article === undefined){
+                res.status(403).json({
+                    status: "FAILED",
+                    message: "Il n'y a aucun article",
+                    data: undefined
+                });
+                console.log(`${req.method} | ${req.originalUrl} | \nIl n'y a aucun article`);
+                return;
+            };
+            res.status(201).json({
+                status: "OK",
+                message: "L'article a été supprimé avec succès",
+                data: article
+            });
+            console.log(`${req.method} | ${req.originalUrl} | \nL'article a été supprimé avec succès`);
+        }
+        catch (err) {
+            res.status(500).json({
+                status: "FAILED",
+                message: "Erreur serveur"
+            });
+        };
+    };
+};

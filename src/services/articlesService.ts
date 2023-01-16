@@ -32,7 +32,7 @@ export class ArticlesService {
     };
 
     // modification d'un article
-    async putArticles(id: number, chronicle: string,userID: number){
+    async putArticles(id: number, chronicle: string, userID: number){
         const data = await client.query('UPDATE articleS SET chronicle=$2 WHERE id=$1 RETURNING *', [id, chronicle, userID]);
         if (data.rowCount) {
             return data.rows[0];
