@@ -128,12 +128,14 @@ export class ArticlesController
     // modification de l'article (par le user_id)
     async putArticles(req: Request, res: Response)
     {
-        const chronicle: string = req.body;
+        const chronicle: string = req.body.chronicle;
+        
         const articleId: number = parseInt(req.params.id);
         // @ts-ignore
         const userId: number = req.userId?.userId!;
 
         // message d'erreur pour un chronicle inexistant ou qui n'est pas au format string
+        
         if (chronicle === undefined || typeof chronicle !== typeof String())
         {
             res.status(403).json({
@@ -164,6 +166,7 @@ export class ArticlesController
 
             // changer l'article par le user déjà identifié
             const article = await articlesService.putArticles(articleId, chronicle);
+
 
             // message d'erreur pour un article non défini
             if (article === undefined)
