@@ -3,36 +3,36 @@
 BEGIN;
 
 
-DROP TABLE IF EXISTS public.articles;
+DROP TABLE IF EXISTS public.articles CASCADE;
 
 CREATE TABLE IF NOT EXISTS public.articles
 (
-    id integer NOT NULL DEFAULT nextval('articles_id_seq'::regclass),
-    chonicle character varying COLLATE pg_catalog."default" NOT NULL,
+    id serial NOT NULL,
+    chronicle character varying COLLATE pg_catalog."default" NOT NULL,
     create_date date,
     deleted_date date,
     user_id integer NOT NULL,
     CONSTRAINT articles_pkey PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS public.comments;
+DROP TABLE IF EXISTS public.comments CASCADE;
 
 CREATE TABLE IF NOT EXISTS public.comments
 (
-    id integer NOT NULL DEFAULT nextval('comment_id_seq'::regclass),
+    id serial NOT NULL,
     message character varying COLLATE pg_catalog."default",
-    "cratedDate" date,
-    "deletedDate" date,
-    article_id integer,
-    user_id integer,
+    created_date date,
+    deleted_date date,
+    article_id integer NOT NULL,
+    user_id integer NOT NULL,
     CONSTRAINT comment_pkey PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS public.users;
+DROP TABLE IF EXISTS public.users CASCADE;
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    id integer NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+    id serial NOT NULL,
     name character varying COLLATE pg_catalog."default" NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
