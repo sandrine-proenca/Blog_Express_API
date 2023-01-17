@@ -2,6 +2,7 @@
 import * as dotenv from 'dotenv';
 import express = require('express');
 import { JwtPayload } from 'jsonwebtoken';
+import { articlesRouter } from './routes/articlesRouter';
 import { usersRouter } from './routes/usersRouter';
 
 
@@ -56,6 +57,7 @@ app.use(function (req: express.Request, res: express.Response, next)
    */
 //app.use('/api/tickets', ticketsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/articles', articlesRouter)
 
 
 

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.articles
 (
     id serial NOT NULL,
     chronicle character varying COLLATE pg_catalog."default" NOT NULL,
-    create_date date,
+    created_date date,
     deleted_date date,
     user_id integer NOT NULL,
     CONSTRAINT articles_pkey PRIMARY KEY (id)
@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS public.users
     id serial NOT NULL,
     name character varying COLLATE pg_catalog."default" NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
+    admin boolean NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
 );
 

@@ -12,7 +12,9 @@ export class ArticlesController
     {
         try
         {
+            // récupération de tous les articles en appelant le fichier articlesService
             const articles = await articlesService.getAllArticles();
+
             // aucun article existant
             if (articles === undefined)
             {
@@ -24,13 +26,14 @@ export class ArticlesController
                 console.log(`${req.method} | ${req.originalUrl} \nIl n'existe aucun article`);
                 return;
             }
-            // les articles existent
+            // message de bonne résolution de la requette
             res.status(201).json({
                 status: "OK",
                 message: "Les articles existent",
                 data: articles
             });
         }
+        // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
@@ -45,10 +48,12 @@ export class ArticlesController
     async getArticlesById(req: Request, res: Response)
     {
 
-        const articlesId = parseInt(req.params.id);
+        const articlesId: number = parseInt(req.params.id);
         try
-        {
+        {            
+            // récupération d'un article en appelant le fichier articlesService
             const article = await articlesService.getArticlesById(articlesId);
+
             // article inexistant
             if (article === undefined)
             {
@@ -60,12 +65,14 @@ export class ArticlesController
                 console.log(`${req.method} | ${req.originalUrl} \nL'article est inexistant`);
                 return;
             }
+            // message de bonne résolution de la requette
             res.status(201).json({
                 status: "OK",
                 message: "Les articles existent",
                 data: article
             });
         }
+        // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
@@ -79,8 +86,15 @@ export class ArticlesController
     //création d'un article
     async postArticles(req: Request, res: Response)
     {
+<<<<<<< HEAD
         const chronicle = req.body;
         const userID = req.body.userID;
+=======
+        const chronicle: string = req.body.chronicle;
+
+        // @ts-ignore
+        const userId: number = req.userId?.userId!;
+>>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
 
         // message d'erreur pour un chronicle inexistant
         if (chronicle === undefined || typeof chronicle !== typeof String())
@@ -95,23 +109,17 @@ export class ArticlesController
         }
         try
         {
-            const article = await articlesService.postArticles(chronicle, userID);
-            if (userID === undefined)
-            {
-                res.status(400).json({
-                    status: "FAILED",
-                    message: "Le USER n'existe pas",
-                    data: undefined
-                });
-                console.log(`${req.method} | ${req.originalUrl} | \nLe USER n'existe pas`);
-                return;
-            };
+            // créer un nouvel article en appelant le fichier articlesService
+            const article = await articlesService.postArticles(chronicle, userId);
+
+            // message de bonne résolution de la requette
             res.status(201).json({
                 status: "OK",
                 message: "Le ticket a bien été créé",
                 data: article
             });
         }
+        // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
@@ -125,10 +133,19 @@ export class ArticlesController
     // modification de l'article (par le user_id)
     async putArticles(req: Request, res: Response)
     {
+<<<<<<< HEAD
         const chronicle = req.body;
         const id = req.params.id;
         const userId = parseInt(req.user);
         // message d'erreur pour un chronicle inexistant
+=======
+        const chronicle: string = req.body;
+        const articleId: number = parseInt(req.params.id);
+        // @ts-ignore
+        const userId: number = req.userId?.userId!;
+
+        // message d'erreur pour un chronicle inexistant ou qui n'est pas au format string
+>>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
         if (chronicle === undefined || typeof chronicle !== typeof String())
         {
             res.status(403).json({
@@ -141,8 +158,11 @@ export class ArticlesController
         };
         try
         {
-            const validArticle = articlesService.getArticlesById(id);
-            if (validArticle && validArticle.user_id !== userId)
+            // on récupère l'article demandé et existant avec le user identifié (en appelant le fichier articlesService)
+            const checkArticle = await articlesService.getArticlesById(articleId);
+
+            // message d'erreur pour un article existant, mais pas le bon user
+            if (checkArticle && checkArticle.user_id !== userId)
             {
                 res.status(403).json({
                     status: "FAILED",
@@ -152,24 +172,36 @@ export class ArticlesController
                 console.log(`${req.method} | ${req.originalUrl} | \nLe ticket n'est pas à vous`);
                 return;
             };
+<<<<<<< HEAD
             const article = await articlesService.putArticles(id, chronicle, userId);
             if (validArticle === undefined)
+=======
+
+            // changer l'article par le user déjà identifié
+            const article = await articlesService.putArticles(articleId, chronicle, userId);
+
+            // message d'erreur pour un article non défini
+            if (article === undefined)
+>>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
             {
                 res.status(404).json({
                     status: "FAILED",
-                    message: "L'aticle est inexistant",
+                    message: "Une erreur est survenue lors de l'édition de l'article",
                     data: undefined
                 });
-                console.log(`${req.method} | ${req.originalUrl} | \nLarticle est inexistant`);
+                console.log(`${req.method} | ${req.originalUrl} | \nUne erreur est survenue lors de l'édition de l'article`);
                 return;
             };
+
+            // message de la bonne résolution de la requette
             res.status(201).json({
                 status: "OK",
                 message: "L'article a bien été modifié",
-                data: validArticle
+                data: checkArticle
             });
             console.log(`${req.method} | ${req.originalUrl} | \nL'article a bien été modifié`);
         }
+        // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
@@ -183,11 +215,34 @@ export class ArticlesController
     async deleteArticles(req: Request, res: Response)
     {
         console.log("test deleteArticles", req.body);
+<<<<<<< HEAD
         const userId = req.user;
+=======
+        const articleId: number = parseInt(req.params.id);
+        // @ts-ignore
+        const userId: number = req.userId?.userId!;
+>>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
         const id = parseInt(req.params.id);
         try
         {
+            // on récupère l'article existant avec le bon user en appelant le fichier articlesService
+            const checkArticle = await articlesService.getArticlesById(articleId);
+
+            // message d'erreur pour un article existant, mais pas le bon user
+            if (checkArticle && checkArticle.user_id !== userId)
+            {
+                res.status(403).json({
+                    status: "FAILED",
+                    message: "Le ticket n'est pas à vous",
+                    data: undefined
+                });
+                console.log(`${req.method} | ${req.originalUrl} | \nLe ticket n'est pas à vous`);
+                return;
+            };
+            // on supprime l'article existant avec le bon user en appelant le fichier articlesService
             const article = await articlesService.deleteArticles(id, userId);
+
+            // message d'erreur pour un article non défini
             if (article === undefined)
             {
                 res.status(403).json({
@@ -198,6 +253,7 @@ export class ArticlesController
                 console.log(`${req.method} | ${req.originalUrl} | \nIl n'y a aucun article`);
                 return;
             };
+            // message de bonne résolution de la requette
             res.status(201).json({
                 status: "OK",
                 message: "L'article a été supprimé avec succès",
@@ -205,6 +261,7 @@ export class ArticlesController
             });
             console.log(`${req.method} | ${req.originalUrl} | \nL'article a été supprimé avec succès`);
         }
+        // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
