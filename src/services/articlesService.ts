@@ -37,8 +37,10 @@ export class ArticlesService {
     };
 
     // modification d'un article
-    async putArticles(id: number, chronicle: string, userId: number): Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('UPDATE articleS SET chronicle=$2 WHERE id=$1 RETURNING *', [id, chronicle, userId]);
+    async putArticles(id: number, chronicle: string): Promise <TArticle | undefined> {
+        
+        const articles: QueryResult <TArticle> = await client.query('UPDATE articles SET chronicle=$1 WHERE id=$2 RETURNING *', [chronicle,id ]);
+        console.log(articles);
         if (articles.rowCount) {
             return articles.rows[0];
         }
@@ -46,8 +48,8 @@ export class ArticlesService {
     };
 
     // suppression d'un article
-    async deleteArticles(id: number, userId: number):Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('DELETE FROM articles WHERE id=$1 RETURNING *', [id, userId]);
+    async deleteArticles(id: number):Promise <TArticle | undefined> {
+        const articles: QueryResult <TArticle> = await client.query('DELETE FROM articles WHERE id=$1 RETURNING *', [id]);
         if (articles.rowCount) {
             return articles.rows[0];
         }
