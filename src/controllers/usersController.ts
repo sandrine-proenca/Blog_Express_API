@@ -97,8 +97,8 @@ export class UsersController {
                 const user = await usersService.addUser(name, hash);
                 
                 res.status(201).json({
-                    status: "FAILED.",
-                    message: "Le nom: ${name} et son mot de passe associé sont valides.",
+                    status: "OK.",
+                    message: `Le nom ${name} et son mot de passe associé sont valides.`,
                     data: user
                 });
                 //console.log(`${req.method} | ${req.originalUrl} |  \nLe nom: ${name} et son mot de passe associé sont valides`);

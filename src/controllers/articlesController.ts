@@ -80,7 +80,7 @@ export class ArticlesController
     async postArticles(req: Request, res: Response)
     {
         const chronicle = req.body;
-        const userID = req.userId;
+        const userID = req.body.userID;
 
         // message d'erreur pour un chronicle inexistant
         if (chronicle === undefined || typeof chronicle !== typeof String())
@@ -127,7 +127,7 @@ export class ArticlesController
     {
         const chronicle = req.body;
         const id = req.params.id;
-        const userId = parseInt(req.userId);
+        const userId = parseInt(req.user);
         // message d'erreur pour un chronicle inexistant
         if (chronicle === undefined || typeof chronicle !== typeof String())
         {
@@ -152,7 +152,7 @@ export class ArticlesController
                 console.log(`${req.method} | ${req.originalUrl} | \nLe ticket n'est pas à vous`);
                 return;
             };
-            const article = await articlesService.putArticles(id, chronicle, userID);
+            const article = await articlesService.putArticles(id, chronicle, userId);
             if (validArticle === undefined)
             {
                 res.status(404).json({
@@ -183,7 +183,7 @@ export class ArticlesController
     async deleteArticles(req: Request, res: Response)
     {
         console.log("test deleteArticles", req.body);
-        const userId = req.userId;
+        const userId = req.user;
         const id = parseInt(req.params.id);
         try
         {
