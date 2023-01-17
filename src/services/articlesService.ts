@@ -38,9 +38,7 @@ export class ArticlesService {
 
     // modification d'un article
     async putArticles(id: number, chronicle: string): Promise <TArticle | undefined> {
-        
-        const articles: QueryResult <TArticle> = await client.query('UPDATE articles SET chronicle=$1 WHERE id=$2 RETURNING *', [chronicle,id ]);
-        console.log(articles);
+        const articles: QueryResult <TArticle> = await client.query('UPDATE articles SET chronicle=$1 WHERE id=$2 RETURNING *', [chronicle, id]);
         if (articles.rowCount) {
             return articles.rows[0];
         }
