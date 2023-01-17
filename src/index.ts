@@ -9,7 +9,7 @@ declare global
     {
         interface Request
         {
-            user?: JwtPayload // permet d'inserer un user a req pour l'id
+            userId?: string | JwtPayload | undefined // permet d'inserer un user a req pour l'id
         }
     }
 }

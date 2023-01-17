@@ -1,3 +1,6 @@
+import { QueryArrayResult, QueryResult } from "pg";
+import TArticle from "../types/TArticle";
+
 // IMPORTS
 const client = require('../client');
 
@@ -5,25 +8,25 @@ const client = require('../client');
 export class ArticlesService {
 
     // récupération de tous les articles
-    async getAllArticles() {
-        const data = await client.query('SELECT * FROM articles');
-        if (data.rowCount) {
-            return data.rows;
+    async getAllArticles(): Promise <TArticle[] | undefined> {
+        const articles: QueryResult<TArticle> = await client.query('SELECT * FROM articles');
+        if (articles.rowCount>0) {
+            return articles.rows;
         }
         return undefined;
     };
 
     // récupération d'un article
-    async getArticlesById(id: number){
-        const data = await client.query('SELECT * FROM articles WHERE id=$1', [id]);
-        if (data.rowCount) {
-            return data.rows[0];
+    async getArticlesById(id: number): Promise <TArticle | undefined> {
+        const  articles: QueryResult<TArticle> = await client.query('SELECT * FROM articles WHERE id=$1', [id]);
+        if ( articles.rowCount>0) {
+            return  articles.rows[0];
         }
         return undefined;
     };
 
     // création d'un article
-    async postArticles(chronicle: string){
+    async postArticles(chronicle: string): Promise <TArticle | undefined> {
         const data = await client.query('INSERT INTO articleS (chronicle) VALUES ($1) RETURNING *',[chronicle]);
         if (data.rowCount){
             return data.rows[0];
