@@ -2,6 +2,8 @@
 import * as dotenv from 'dotenv';
 import express = require('express');
 import { JwtPayload } from 'jsonwebtoken';
+import { usersRouter } from './routes/usersRouter';
+
 
 declare global
 {
@@ -21,7 +23,7 @@ dotenv.config({ path: '.env' });
 
 // Express server creation
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 
 // for parsing application/json
 app.use(express.json());
@@ -52,6 +54,8 @@ app.use(function (req: express.Request, res: express.Response, next)
 /************************************************
    * Add the route here
    */
+//app.use('/api/tickets', ticketsRouter);
+app.use('/api/users', usersRouter);
 
 
 
@@ -62,3 +66,4 @@ app.listen(port, () =>
         `Express server has started on port ${port}. Open http://localhost:${port} to see results`
     );
 });
+
