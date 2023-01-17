@@ -11,12 +11,18 @@ export const authenticateJWT = (req: Request, res: Response, next: () => void) =
         const token = authHeader.split(' ')[1];
         jwt.verify(token, process.env.TOKEN_SECRET!, (err: any, token: string | JwtPayload | undefined)=>{
             if (err) {
-                return res.sendStatus(403);
+                return res.sendStatus(403).json({
+                    status: "FAILED",
+                    message: "Vous ne disposez pas des droits aux accès du contenu"
+                });
             }
             req.userId = token;
             next();
         });
     } else {
-        res.sendStatus(401);
+        res.sendStatus(401).json({
+            status: "FAILED",
+            message: "Votre mot de passe n'est pas valable"
+        });
     };
 };

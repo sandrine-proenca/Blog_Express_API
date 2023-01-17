@@ -1,12 +1,17 @@
 // IMPORTS
-const express = require('express');
-const authenticateJWT = require('../middleware/auth');
+import express = require('express');
+import { ArticlesController } from '../controllers/articlesController';
+import { authenticateJWT } from '../middleware/auth';
 
-const ArticlesController = require('../controllers/articlesController');
 
-const articlesRouter = express.Router();
+export const articlesRouter = express.Router();
+
 const articlesController = new ArticlesController();
 
     // récupération de tous les articles
     articlesRouter.get('/', authenticateJWT, articlesController.getAllArticles);
+    articlesRouter.get('/:id', authenticateJWT, articlesController.getArticlesById);
+    articlesRouter.post('/', authenticateJWT, articlesController.postArticles);
+    articlesRouter.put('/:id', authenticateJWT, articlesController.putArticles);
+    articlesRouter.delete('/:id',authenticateJWT, articlesController.deleteArticles);
 

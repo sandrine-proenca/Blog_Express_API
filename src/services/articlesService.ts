@@ -1,8 +1,10 @@
-import { QueryArrayResult, QueryResult } from "pg";
+// IMPORTS
+import {client} from "../client"
+import { QueryResult } from "pg";
 import TArticle from "../types/TArticle";
 
-// IMPORTS
-const client = require('../client');
+
+
 
 
 export class ArticlesService {
@@ -26,8 +28,8 @@ export class ArticlesService {
     };
 
     // création d'un article
-    async postArticles(chronicle: string): Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('INSERT INTO articleS (chronicle) VALUES ($1) RETURNING *',[chronicle]);
+    async postArticles(chronicle: string, userId: number): Promise <TArticle | undefined> {
+        const articles: QueryResult <TArticle> = await client.query('INSERT INTO articleS (chronicle, user_id) VALUES ($1, $2) RETURNING *',[chronicle, userId]);
         if (articles.rowCount>0){
             return articles.rows[0];
         }
@@ -35,8 +37,8 @@ export class ArticlesService {
     };
 
     // modification d'un article
-    async putArticles(id: number, chronicle: string, userID: number): Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('UPDATE articleS SET chronicle=$2 WHERE id=$1 RETURNING *', [id, chronicle, userID]);
+    async putArticles(id: number, chronicle: string, userId: number): Promise <TArticle | undefined> {
+        const articles: QueryResult <TArticle> = await client.query('UPDATE articleS SET chronicle=$2 WHERE id=$1 RETURNING *', [id, chronicle, userId]);
         if (articles.rowCount) {
             return articles.rows[0];
         }
@@ -44,8 +46,8 @@ export class ArticlesService {
     };
 
     // suppression d'un article
-    async deleteArticles(id: number):Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('DELETE FROM articles WHERE id=$1 RETURNING *', [id]);
+    async deleteArticles(id: number, userId: number):Promise <TArticle | undefined> {
+        const articles: QueryResult <TArticle> = await client.query('DELETE FROM articles WHERE id=$1 RETURNING *', [id, userId]);
         if (articles.rowCount) {
             return articles.rows[0];
         }

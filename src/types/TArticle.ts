@@ -4,6 +4,6 @@ type TArticle = {
     chronicle: string,
     creat_date: Date,
     deleted_date: Date,
-    user_id: string
+    user_id: number
 }
 export default TArticle;
