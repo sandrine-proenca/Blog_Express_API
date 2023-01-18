@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS public.articles CASCADE;
 CREATE TABLE IF NOT EXISTS public.articles
 (
     id serial NOT NULL,
+	title character varying COLLATE pg_catalog."default" NOT NULL,
     chronicle character varying COLLATE pg_catalog."default" NOT NULL,
     created_date date DEFAULT CURRENT_DATE,
     deleted_date date,
