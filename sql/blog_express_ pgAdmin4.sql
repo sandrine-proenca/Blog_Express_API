@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS public.comments
 (
     id serial NOT NULL,
     message character varying COLLATE pg_catalog."default",
-    created_date date,
-    deleted_date date DEFAULT CURRENT_DATE,
+    created_date date DEFAULT CURRENT_DATE,
+    deleted_date date,
     article_id integer NOT NULL,
     user_id integer NOT NULL,
     CONSTRAINT comment_pkey PRIMARY KEY (id)
