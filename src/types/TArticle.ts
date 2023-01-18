@@ -1,6 +1,7 @@
 
 type TArticle = {
     id: number,
+    title: string,
     chronicle: string,
     creat_date: Date,
     deleted_date: Date,

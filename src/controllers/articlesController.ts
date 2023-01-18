@@ -87,7 +87,7 @@ export class ArticlesController
     //création d'un article
     async postArticles(req: Request, res: Response)
     {
-        const title: string = req.body.chronicle;
+        const title: string = req.body.title;
         const chronicle: string = req.body.chronicle;
 
         // @ts-ignore
@@ -141,15 +141,29 @@ export class ArticlesController
 
     // modification de l'article (par le user_id)
     async putArticles(req: Request, res: Response)
-    {
+    {          
+        const title: string = req.body.title;
+        
         const chronicle: string = req.body.chronicle;
         
         const articleId: number = parseInt(req.params.id);
         // @ts-ignore
         const userId: number = req.userId?.userId!;
 
-        // message d'erreur pour un chronicle inexistant ou qui n'est pas au format string
+        // message d'erreur pour un titre inexistant ou qui n'est pas au format string
+        if (title === undefined || typeof title !== typeof String())
+        {
+            res.status(403).json({
+                status: "FAILED",
+                message: "Obligation d'avoir un titre en format string",
+                data: undefined
+            });
+            console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un titre en format string`);
+            return;
+        };
         
+
+        // message d'erreur pour un chronicle inexistant ou qui n'est pas au format string
         if (chronicle === undefined || typeof chronicle !== typeof String())
         {
             res.status(403).json({
@@ -179,7 +193,7 @@ export class ArticlesController
             };
 
             // changer l'article par le user déjà identifié
-            const article = await articlesService.putArticles(articleId, chronicle);
+            const article = await articlesService.putArticles( articleId, title, chronicle);
 
 
             // message d'erreur pour un article non défini

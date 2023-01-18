@@ -61,7 +61,11 @@ app.use('/api/users', usersRouter);
 app.use('/api/articles', articlesRouter)
 app.use('/api/comments', commentsRouter)
 
-
+// console pour tout autre message d'erreur déjà déclaré
+app.all("*",(req, res)=>{
+    console.log(req.method,req.originalUrl);
+    
+})
 
 // Bind express server on port 8080
 app.listen(port, () =>
