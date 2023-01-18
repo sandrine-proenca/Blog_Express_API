@@ -1,5 +1,6 @@
 //IMPORTS
 import { Request, Response } from "express";
+import { title } from "process";
 import { ArticlesService } from "../services/articlesService";
 
 const articlesService = new ArticlesService();
@@ -86,10 +87,23 @@ export class ArticlesController
     //création d'un article
     async postArticles(req: Request, res: Response)
     {
+        const title: string = req.body.chronicle;
         const chronicle: string = req.body.chronicle;
 
         // @ts-ignore
         const userId: number = req.userId?.userId!;
+
+        // message d'erreur pour un titre inexistant
+        if (title === undefined || typeof title !== typeof String())
+        {
+            res.status(403).json({
+                status: "FAILED",
+                message: "Obligation d'avoir un titre en format string",
+                data: undefined
+            });
+            console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un titre en format string`);
+            return;
+        }
 
         // message d'erreur pour un chronicle inexistant
         if (chronicle === undefined || typeof chronicle !== typeof String())
@@ -105,7 +119,7 @@ export class ArticlesController
         try
         {
             // créer un nouvel article en appelant le fichier articlesService
-            const article = await articlesService.postArticles(chronicle, userId);
+            const article = await articlesService.postArticles(title, chronicle, userId);
 
             // message de bonne résolution de la requette
             res.status(201).json({

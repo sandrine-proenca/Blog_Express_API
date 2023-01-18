@@ -28,8 +28,8 @@ export class ArticlesService {
     };
 
     // création d'un article
-    async postArticles(chronicle: string, userId: number): Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('INSERT INTO articleS (chronicle, user_id) VALUES ($1, $2) RETURNING *',[chronicle, userId]);
+    async postArticles(title: string, chronicle: string, userId: number): Promise <TArticle | undefined> {
+        const articles: QueryResult <TArticle> = await client.query('INSERT INTO articleS (title, chronicle, user_id) VALUES ($1, $2, $3) RETURNING *',[title, chronicle, userId]);
         if (articles.rowCount>0){
             return articles.rows[0];
         }
