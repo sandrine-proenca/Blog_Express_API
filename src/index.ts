@@ -62,7 +62,7 @@ app.use('/api/articles', articlesRouter)
 app.use('/api/comments', commentsRouter)
 
 // console pour tout autre message d'erreur déjà déclaré
-app.all("*",(req, res)=>{
+app.all("*", async (req, res)=>{
     console.log(req.method,req.originalUrl);
     
 })
