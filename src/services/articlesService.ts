@@ -37,13 +37,8 @@ export class ArticlesService {
     };
 
     // modification d'un article
-<<<<<<< HEAD
-    async putArticles(id: number, chronicle: string, userID: number): Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('UPDATE articles SET chronicle=$2 WHERE id=$1 RETURNING *', [id, chronicle, userID]);
-=======
     async putArticles(id: number, chronicle: string, userId: number): Promise <TArticle | undefined> {
         const articles: QueryResult <TArticle> = await client.query('UPDATE articleS SET chronicle=$2 WHERE id=$1 RETURNING *', [id, chronicle, userId]);
->>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
         if (articles.rowCount) {
             return articles.rows[0];
         }

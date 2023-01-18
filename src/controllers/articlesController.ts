@@ -86,15 +86,10 @@ export class ArticlesController
     //création d'un article
     async postArticles(req: Request, res: Response)
     {
-<<<<<<< HEAD
-        const chronicle = req.body;
-        const userID = req.body.userID;
-=======
         const chronicle: string = req.body.chronicle;
 
         // @ts-ignore
         const userId: number = req.userId?.userId!;
->>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
 
         // message d'erreur pour un chronicle inexistant
         if (chronicle === undefined || typeof chronicle !== typeof String())
@@ -133,19 +128,12 @@ export class ArticlesController
     // modification de l'article (par le user_id)
     async putArticles(req: Request, res: Response)
     {
-<<<<<<< HEAD
-        const chronicle = req.body;
-        const id = req.params.id;
-        const userId = parseInt(req.user);
-        // message d'erreur pour un chronicle inexistant
-=======
         const chronicle: string = req.body;
         const articleId: number = parseInt(req.params.id);
         // @ts-ignore
         const userId: number = req.userId?.userId!;
 
         // message d'erreur pour un chronicle inexistant ou qui n'est pas au format string
->>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
         if (chronicle === undefined || typeof chronicle !== typeof String())
         {
             res.status(403).json({
@@ -172,17 +160,12 @@ export class ArticlesController
                 console.log(`${req.method} | ${req.originalUrl} | \nLe ticket n'est pas à vous`);
                 return;
             };
-<<<<<<< HEAD
-            const article = await articlesService.putArticles(id, chronicle, userId);
-            if (validArticle === undefined)
-=======
 
             // changer l'article par le user déjà identifié
             const article = await articlesService.putArticles(articleId, chronicle, userId);
 
             // message d'erreur pour un article non défini
             if (article === undefined)
->>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
             {
                 res.status(404).json({
                     status: "FAILED",
@@ -215,13 +198,9 @@ export class ArticlesController
     async deleteArticles(req: Request, res: Response)
     {
         console.log("test deleteArticles", req.body);
-<<<<<<< HEAD
-        const userId = req.user;
-=======
         const articleId: number = parseInt(req.params.id);
         // @ts-ignore
         const userId: number = req.userId?.userId!;
->>>>>>> dd315349042a16570098abdd62c433a90d16b2f2
         const id = parseInt(req.params.id);
         try
         {

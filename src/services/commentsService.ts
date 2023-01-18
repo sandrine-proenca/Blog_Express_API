@@ -26,10 +26,10 @@ export class CommentsService {
     }
 
     //création d'un commentaire dans un article:
-    async postComment(message: string, articleId:number, userId: number): Promise<TComments[] | undefined> {
+    async postComment(message: string, articleId:number, userId: number): Promise<TComments | undefined> {
         const comments: QueryResult<TComments> = await client.query('INSERT INTO comments (message, article_id, user_id) VALUES ($1, $2, $3) RETURNING *', [message, articleId, userId]);
         if (comments.rowCount) {
-            return comments.rows;
+            return comments.rows[0];
         }
         return undefined;
     }
