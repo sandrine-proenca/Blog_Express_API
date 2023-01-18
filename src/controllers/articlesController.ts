@@ -1,6 +1,5 @@
 //IMPORTS
 import { Request, Response } from "express";
-import { title } from "process";
 import { ArticlesService } from "../services/articlesService";
 
 const articlesService = new ArticlesService();
@@ -137,7 +136,7 @@ export class ArticlesController
             // message de bonne résolution de la requette
             res.status(201).json({
                 status: "OK",
-                message: "Le ticket a bien été créé",
+                message: "L'article a bien été créé",
                 data: articles
             });
         }
