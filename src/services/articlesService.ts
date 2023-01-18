@@ -28,8 +28,8 @@ export class ArticlesService {
     };
 
     // création d'un article
-    async postArticles(chronicle: string, userId: number): Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('INSERT INTO articleS (chronicle, user_id) VALUES ($1, $2) RETURNING *',[chronicle, userId]);
+    async postArticles(title: string, chronicle: string, userId: number): Promise <TArticle | undefined> {
+        const articles: QueryResult <TArticle> = await client.query('INSERT INTO articles (title, chronicle, user_id) VALUES ($1, $2, $3) RETURNING *',[title, chronicle, userId]);
         if (articles.rowCount>0){
             return articles.rows[0];
         }
@@ -37,8 +37,9 @@ export class ArticlesService {
     };
 
     // modification d'un article
-    async putArticles(id: number, chronicle: string): Promise <TArticle | undefined> {
-        const articles: QueryResult <TArticle> = await client.query('UPDATE articles SET chronicle=$1 WHERE id=$2 RETURNING *', [chronicle, id]);
+    async putArticles(id: number, title: string, chronicle: string): Promise <TArticle | undefined> {
+        
+        const articles: QueryResult <TArticle> = await client.query('UPDATE articles SET title=$1, chronicle=$2 WHERE id=$3 RETURNING *', [title, chronicle, id]);
         if (articles.rowCount) {
             return articles.rows[0];
         }

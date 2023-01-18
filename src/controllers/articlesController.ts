@@ -1,5 +1,6 @@
 //IMPORTS
 import { Request, Response } from "express";
+import { title } from "process";
 import { ArticlesService } from "../services/articlesService";
 
 const articlesService = new ArticlesService();
@@ -38,7 +39,8 @@ export class ArticlesController
         {
             res.status(500).json({
                 status: "FAILED",
-                message: "Erreur serveur"
+                message: "Erreur serveur",
+                data: undefined
             });
             console.log(err);
         }
@@ -49,27 +51,38 @@ export class ArticlesController
     {
 
         const articlesId: number = parseInt(req.params.id);
+
+        // message d'erreur pour id différent d'un nombre
+        if (Number.isNaN(Number(articlesId)))
+        {
+            res.status(400).json({
+                status: "FAILED",
+                message: "La requête incomprise par le serveur / syntaxe incorrecte.",
+                data: undefined
+            });
+        };
+
         try
-        {            
+        {
             // récupération d'un article en appelant le fichier articlesService
-            const article = await articlesService.getArticlesById(articlesId);
+            const articles = await articlesService.getArticlesById(articlesId);
 
             // article inexistant
-            if (article === undefined)
+            if (articles === undefined)
             {
-                res.status(403).json({
+                res.status(404).json({
                     status: "FAILED",
                     message: "L'article est inexistant",
                     data: undefined
                 });
                 console.log(`${req.method} | ${req.originalUrl} \nL'article est inexistant`);
                 return;
-            }
+            };
             // message de bonne résolution de la requette
             res.status(201).json({
                 status: "OK",
                 message: "Les articles existent",
-                data: article
+                data: articles
             });
         }
         // message d'erreur serveur
@@ -77,7 +90,8 @@ export class ArticlesController
         {
             res.status(500).json({
                 status: "FAILED",
-                message: "Erreur serveur"
+                message: "Erreur serveur",
+                data: undefined
             });
             console.log(err);
         };
@@ -86,10 +100,23 @@ export class ArticlesController
     //création d'un article
     async postArticles(req: Request, res: Response)
     {
+        const title: string = req.body.title;
         const chronicle: string = req.body.chronicle;
 
         // @ts-ignore
         const userId: number = req.userId?.userId!;
+
+        // message d'erreur pour un titre inexistant
+        if (title === undefined || typeof title !== typeof String())
+        {
+            res.status(403).json({
+                status: "FAILED",
+                message: "Obligation d'avoir un titre en format string",
+                data: undefined
+            });
+            console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un titre en format string`);
+            return;
+        }
 
         // message d'erreur pour un chronicle inexistant
         if (chronicle === undefined || typeof chronicle !== typeof String())
@@ -105,13 +132,13 @@ export class ArticlesController
         try
         {
             // créer un nouvel article en appelant le fichier articlesService
-            const article = await articlesService.postArticles(chronicle, userId);
+            const articles = await articlesService.postArticles(title, chronicle, userId);
 
             // message de bonne résolution de la requette
             res.status(201).json({
                 status: "OK",
                 message: "Le ticket a bien été créé",
-                data: article
+                data: articles
             });
         }
         // message d'erreur serveur
@@ -119,7 +146,8 @@ export class ArticlesController
         {
             res.status(500).json({
                 status: "FAILED",
-                message: "Erreur serveur"
+                message: "Erreur serveur",
+                data: undefined
             });
             console.log(err);
         };
@@ -128,14 +156,39 @@ export class ArticlesController
     // modification de l'article (par le user_id)
     async putArticles(req: Request, res: Response)
     {
+        const title: string = req.body.title;
+
         const chronicle: string = req.body.chronicle;
-        
-        const articleId: number = parseInt(req.params.id);
+
+        const articlesId: number = parseInt(req.body.id);
         // @ts-ignore
         const userId: number = req.userId?.userId!;
 
+
+        // message d'erreur pour id demandé différent d'un nombre
+        if (Number.isNaN(Number(articlesId)))
+        {
+            res.status(400).json({
+                status: "FAILED",
+                message: "La requête incomprise par le serveur / syntaxe incorrecte.",
+                data: undefined
+            });
+        };
+
+        // message d'erreur pour un titre inexistant ou qui n'est pas au format string
+        if (title === undefined || typeof title !== typeof String())
+        {
+            res.status(403).json({
+                status: "FAILED",
+                message: "Obligation d'avoir un titre en format string",
+                data: undefined
+            });
+            console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un titre en format string`);
+            return;
+        };
+
+
         // message d'erreur pour un chronicle inexistant ou qui n'est pas au format string
-        
         if (chronicle === undefined || typeof chronicle !== typeof String())
         {
             res.status(403).json({
@@ -146,11 +199,11 @@ export class ArticlesController
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un chronicle en format string`);
             return;
         };
-        
+
         try
         {
             // on récupère l'article demandé et existant avec le user identifié (en appelant le fichier articlesService)
-            const checkArticle = await articlesService.getArticlesById(articleId);
+            const checkArticle = await articlesService.getArticlesById(articlesId);
 
             // message d'erreur pour un article existant, mais pas le bon user
             if (checkArticle && checkArticle.user_id !== userId)
@@ -165,15 +218,14 @@ export class ArticlesController
             };
 
             // changer l'article par le user déjà identifié
-            const article = await articlesService.putArticles(articleId, chronicle);
-
+            const articles = await articlesService.putArticles(articlesId, title, chronicle);
 
             // message d'erreur pour un article non défini
-            if (article === undefined)
+            if (articles === undefined)
             {
                 res.status(404).json({
                     status: "FAILED",
-                    message: "Une erreur est survenue lors de l'édition de l'article",
+                    message: "article inexistant",
                     data: undefined
                 });
                 console.log(`${req.method} | ${req.originalUrl} | \nUne erreur est survenue lors de l'édition de l'article`);
@@ -201,15 +253,29 @@ export class ArticlesController
     //suppression d'un article
     async deleteArticles(req: Request, res: Response)
     {
-        console.log("test deleteArticles", req.body);
-        const articleId: number = parseInt(req.params.id);
+        const articlesId: number = parseInt(req.params.id);
+        console.log(articlesId);
+        
         // @ts-ignore
         const userId: number = req.userId?.userId!;
-        const id = parseInt(req.params.id);
+        console.log(articlesId);
+        
+        // message d'erreur pour id demandé différent d'un nombre
+        if (isNaN(articlesId))
+        {
+            res.status(400).json({
+                status: "FAILED",
+                message: "La requête incomprise par le serveur / syntaxe incorrecte.",
+                data: undefined
+            });
+
+            return;
+        };
+
         try
         {
             // on récupère l'article existant avec le bon user en appelant le fichier articlesService
-            const checkArticle = await articlesService.getArticlesById(articleId);
+            const checkArticle = await articlesService.getArticlesById(articlesId);
 
             // message d'erreur pour un article existant, mais pas le bon user
             if (checkArticle && checkArticle.user_id !== userId)
@@ -223,10 +289,10 @@ export class ArticlesController
                 return;
             };
             // on supprime l'article existant avec le bon user en appelant le fichier articlesService
-            const article = await articlesService.deleteArticles(id);
+            const articles = await articlesService.deleteArticles(articlesId);
 
             // message d'erreur pour un article non défini
-            if (article === undefined)
+            if (articles === undefined)
             {
                 res.status(403).json({
                     status: "FAILED",
@@ -240,7 +306,7 @@ export class ArticlesController
             res.status(201).json({
                 status: "OK",
                 message: "L'article a été supprimé avec succès",
-                data: article
+                data: articles
             });
             console.log(`${req.method} | ${req.originalUrl} | \nL'article a été supprimé avec succès`);
         }
@@ -249,7 +315,8 @@ export class ArticlesController
         {
             res.status(500).json({
                 status: "FAILED",
-                message: "Erreur serveur"
+                message: "Erreur serveur",
+                data: undefined
             });
         };
     };
