@@ -56,6 +56,14 @@ export class UsersController {
                     }
                 })
             }
+            else
+            {
+                res.status(404).json({
+                    status: "FAILED.",
+                    message: "cet user existe pas",
+                    data: undefined
+                });
+            }
         }
         catch (err) {
             res.status(500).json({
