@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
 import { CommentsService } from "../services/commentsService";
-import * as jwt from "jsonwebtoken";
-import * as bcrypt from 'bcrypt';
-import TComments from "../types/TComments";
 
 const commentsService = new CommentsService();
 
@@ -44,11 +41,11 @@ export class CommentsController {
     }
 
     //création d'un commentaire dans un article:
-    async postComment(req: Request, res: Response) {
+    async postComment(req: Request, res: Response){
         console.log(req.body)
 
         const message: string = req.body.message;
-        const articleId: number = req.body.articleId;
+        const articlesId: number = req.body.article_id;
 
         // @ts-ignore
         const userId: number = req.userId?.userId!;
@@ -65,9 +62,10 @@ export class CommentsController {
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un commentaire au format string`);
             return;
         }
-        try {
+        try 
+        {
             //créer un nouveau message en appelant le fichier commentsService
-            const newMessage = await commentsService.postComment(message, articleId, userId);
+            const newMessage = await commentsService.postComment(message, articlesId, userId);
 
             //message de résolution de la requête:
             res.status(201).json({
