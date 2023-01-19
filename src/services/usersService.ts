@@ -1,5 +1,9 @@
 import {client} from '../client'
 import { TPartialUser, TUser } from '../types/types';
+
+/**
+ * classe qui appelle les fonctions asynchrones 'getUserByName' et 'addUser'
+ */
 export class UsersService{
 
     /**
