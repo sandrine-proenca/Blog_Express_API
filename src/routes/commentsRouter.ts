@@ -7,6 +7,6 @@ export const commentsRouter = express.Router();
 const commentsController = new CommentsController();
 
 commentsRouter.get('/:articleId', commentsController.getAllCommentsByArticleId);
-commentsRouter.post('/:id', authenticateJWT, commentsController.postComment);
+commentsRouter.post('/', authenticateJWT, commentsController.postComment);
 commentsRouter.put('/', authenticateJWT, commentsController.putComment);
 commentsRouter.delete('/:id', authenticateJWT, commentsController.deleteComment);

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { CommentsService } from "../services/commentsService";
+import { EStatus, TApiResponse } from "../types/types";
 
 const commentsService = new CommentsService();
 
@@ -8,34 +9,35 @@ export class CommentsController {
     //récupération de tous les commentaires d'un article:
     async getAllCommentsByArticleId(req: Request, res: Response) {
         //console.log(req.params.articleId)
-        const articleId = req.params.articleId
+        const articleId: number = parseInt(req.params.articleId);
         try {
             // récupération de tous les messages d'un article en appelant le fichier commentsService:
-            const comments = await commentsService.getAllCommentsByArticleId(Number(articleId));
+            const comments = await commentsService.getAllCommentsByArticleId(articleId);
 
             // aucun message existant pour cet article:
             if (comments === undefined) {
                 res.status(403).json({
-                    status: "FAILED.",
+                    status: EStatus.FAILED,
                     message: "Il n'existe aucun commentaire pour cet article.",
-                    data: undefined
-                });
+                    data: null
+                }as TApiResponse);
                 console.log(`${req.method} | ${req.originalUrl} \nIl n'existe aucun commentaire pour cet article.`);
                 return;
             }
             //il existe un ou des messages pour cet article:
             res.status(201).json({
-                status: "OK.",
+                status: EStatus.OK,
                 message: "Un ou des commentaires existent pour cet article.",
                 data: comments
-            });
+            }as TApiResponse);
         }
         // message d'erreur serveur
         catch (err) {
             res.status(500).json({
-                status: "FAILED.",
-                message: "Erreur serveur."
-            });
+                status: EStatus.FAILED,
+                message: "Erreur serveur.",
+                data: null
+            }as TApiResponse);
             console.log(err);
         }
     }
@@ -89,9 +91,12 @@ export class CommentsController {
 
     //modification d'un commentaire dans un article:
     async putComment(req: Request, res: Response) {
-        const newMessage: string = req.body.newMessage;
-        const commentId: number = parseInt(req.params.id);
-        const userId: number = req.body.userId;
+        const newMessage: string = req.body.message;
+        const commentId: number = parseInt(req.body.id);
+        
+        // @ts-ignore
+        const userId: number = req.userId?.userId!;
+        console.log(req.userId);
 
         if (!newMessage || !commentId) {
 

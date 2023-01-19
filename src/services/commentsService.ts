@@ -26,7 +26,7 @@ export class CommentsService {
     }
 
     async getCommentById(id: number): Promise<TComments | undefined> {
-        const data: QueryResult<TComments> = await client.query('SELECT * FROM commentary WHERE id=$1', [id])
+        const data: QueryResult<TComments> = await client.query('SELECT * FROM comments WHERE id=$1', [id])
         if (data.rowCount) {
             return data.rows[0]
         }
@@ -44,7 +44,7 @@ export class CommentsService {
 
     //modification d'un commentaire dans un article:
     async putComment(id: number, message: string): Promise<TComments | undefined> {
-        const comments: QueryResult<TComments> = await client.query('UPDATE comments SET message=$2 WHERE id=$1 RETURNING *', [id, message]);
+        const comments: QueryResult<TComments> = await client.query('UPDATE comments SET message=$1 WHERE id=$2 RETURNING *', [message, id]);
         if (comments.rowCount)
             return comments.rows[0];
     }

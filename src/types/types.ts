@@ -1,4 +1,7 @@
 import { JwtPayload } from "jsonwebtoken";
+import { type } from "os";
+import TComments from "./TComments";
+
 
 export interface RequestWithUserRole extends Request
 {
@@ -24,9 +27,14 @@ export type TPartialUser = {
 
 export type TStatus = 'OK' | 'FAILED'
 
-/*export enum EStatus {
+export enum EStatus {
     OK = 'OK',
     FAILED = 'FAILED'
 }
 
-const test: EStatus = EStatus.FAILED*/
+
+export type TApiResponse = {
+    status: EStatus,
+    message: string,
+    data: any
+}
