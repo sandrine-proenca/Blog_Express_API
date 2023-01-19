@@ -1,6 +1,7 @@
 //IMPORTS
 import { Request, Response } from "express";
 import { ArticlesService } from "../services/articlesService";
+import { EStatus, TApiResponse } from "../types/types";
 
 const articlesService = new ArticlesService();
 
@@ -18,29 +19,29 @@ export class ArticlesController
             // aucun article existant
             if (articles === undefined)
             {
-                res.status(403).json({
-                    status: "FAILED",
+                res.status(404).json({
+                    status: EStatus.FAILED,
                     message: "Il n'existe aucun article",
                     data: undefined
-                });
+                }as TApiResponse);
                 console.log(`${req.method} | ${req.originalUrl} \nIl n'existe aucun article`);
                 return;
             }
             // message de bonne résolution de la requette
-            res.status(201).json({
-                status: "OK",
+            res.status(200).json({
+                status: EStatus.OK,
                 message: "Les articles existent",
                 data: articles
-            });
+            }as TApiResponse);
         }
         // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
-                status: "FAILED",
+                status: EStatus.FAILED,
                 message: "Erreur serveur",
                 data: undefined
-            });
+            }as TApiResponse);
             console.log(err);
         }
     }
@@ -55,10 +56,10 @@ export class ArticlesController
         if (Number.isNaN(Number(articlesId)))
         {
             res.status(400).json({
-                status: "FAILED",
+                status: EStatus.FAILED,
                 message: "La requête incomprise par le serveur / syntaxe incorrecte.",
                 data: undefined
-            });
+            }as TApiResponse);
         };
 
         try
@@ -70,28 +71,28 @@ export class ArticlesController
             if (articles === undefined)
             {
                 res.status(404).json({
-                    status: "FAILED",
+                    status: EStatus.FAILED,
                     message: "L'article est inexistant",
                     data: undefined
-                });
+                }as TApiResponse);
                 console.log(`${req.method} | ${req.originalUrl} \nL'article est inexistant`);
                 return;
             };
             // message de bonne résolution de la requette
-            res.status(201).json({
-                status: "OK",
+            res.status(200).json({
+                status: EStatus.OK,
                 message: "Les articles existent",
                 data: articles
-            });
+            }as TApiResponse);
         }
         // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
-                status: "FAILED",
+                status: EStatus.FAILED,
                 message: "Erreur serveur",
                 data: undefined
-            });
+            }as TApiResponse);
             console.log(err);
         };
     };
@@ -108,11 +109,11 @@ export class ArticlesController
         // message d'erreur pour un titre inexistant
         if (title === undefined || typeof title !== typeof String())
         {
-            res.status(403).json({
-                status: "FAILED",
+            res.status(404).json({
+                status: EStatus.FAILED,
                 message: "Obligation d'avoir un titre en format string",
                 data: undefined
-            });
+            }as TApiResponse);
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un titre en format string`);
             return;
         }
@@ -120,11 +121,11 @@ export class ArticlesController
         // message d'erreur pour un chronicle inexistant
         if (chronicle === undefined || typeof chronicle !== typeof String())
         {
-            res.status(403).json({
-                status: "FAILED",
+            res.status(404).json({
+                status: EStatus.FAILED,
                 message: "Obligation d'avoir un chronicle en format string",
                 data: undefined
-            });
+            }as TApiResponse);
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un chronicle en format string`);
             return;
         }
@@ -135,19 +136,19 @@ export class ArticlesController
 
             // message de bonne résolution de la requette
             res.status(201).json({
-                status: "OK",
+                status: EStatus.OK,
                 message: "L'article a bien été créé",
                 data: articles
-            });
+            }as TApiResponse);
         }
         // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
-                status: "FAILED",
+                status: EStatus.FAILED,
                 message: "Erreur serveur",
                 data: undefined
-            });
+            }as TApiResponse);
             console.log(err);
         };
     };
@@ -168,20 +169,20 @@ export class ArticlesController
         if (Number.isNaN(Number(articlesId)))
         {
             res.status(400).json({
-                status: "FAILED",
+                status: EStatus.FAILED,
                 message: "La requête incomprise par le serveur / syntaxe incorrecte.",
                 data: undefined
-            });
+            }as TApiResponse);
         };
 
         // message d'erreur pour un titre inexistant ou qui n'est pas au format string
         if (title === undefined || typeof title !== typeof String())
         {
-            res.status(403).json({
-                status: "FAILED",
+            res.status(404).json({
+                status: EStatus.FAILED,
                 message: "Obligation d'avoir un titre en format string",
                 data: undefined
-            });
+            }as TApiResponse);
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un titre en format string`);
             return;
         };
@@ -190,11 +191,11 @@ export class ArticlesController
         // message d'erreur pour un chronicle inexistant ou qui n'est pas au format string
         if (chronicle === undefined || typeof chronicle !== typeof String())
         {
-            res.status(403).json({
-                status: "FAILED",
+            res.status(404).json({
+                status: EStatus.FAILED,
                 message: "Obligation d'avoir un chronicle en format string",
                 data: undefined
-            });
+            }as TApiResponse);
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un chronicle en format string`);
             return;
         };
@@ -208,10 +209,10 @@ export class ArticlesController
             if (checkArticle && checkArticle.user_id !== userId)
             {
                 res.status(403).json({
-                    status: "FAILED",
+                    status: EStatus.FAILED,
                     message: "Le ticket n'est pas à vous",
                     data: undefined
-                });
+                }as TApiResponse);
                 console.log(`${req.method} | ${req.originalUrl} | \nLe ticket n'est pas à vous`);
                 return;
             };
@@ -223,29 +224,30 @@ export class ArticlesController
             if (articles === undefined)
             {
                 res.status(404).json({
-                    status: "FAILED",
+                    status: EStatus.FAILED,
                     message: "article inexistant",
                     data: undefined
-                });
+                }as TApiResponse);
                 console.log(`${req.method} | ${req.originalUrl} | \nUne erreur est survenue lors de l'édition de l'article`);
                 return;
             };
 
-            // message de la bonne résolution de la requette
+            /** message de la bonne résolution de la requette 201 car création d'une modification */
             res.status(201).json({
-                status: "OK",
+                status: EStatus.OK,
                 message: "L'article a bien été modifié",
                 data: checkArticle
-            });
+            }as TApiResponse);
             console.log(`${req.method} | ${req.originalUrl} | \nL'article a bien été modifié`);
         }
-        // message d'erreur serveur
+        
         catch (err)
         {
+            /**message d'erreur serveur */
             res.status(500).json({
-                status: "FAILED",
+                status: EStatus.FAILED,
                 message: "Erreur serveur"
-            });
+            }as TApiResponse);
         };
     };
 
@@ -263,10 +265,10 @@ export class ArticlesController
         if (isNaN(articlesId))
         {
             res.status(400).json({
-                status: "FAILED",
+                status: EStatus.FAILED,
                 message: "La requête incomprise par le serveur / syntaxe incorrecte.",
                 data: undefined
-            });
+            }as TApiResponse);
 
             return;
         };
@@ -280,10 +282,10 @@ export class ArticlesController
             if (checkArticle && checkArticle.user_id !== userId)
             {
                 res.status(403).json({
-                    status: "FAILED",
+                    status: EStatus.FAILED,
                     message: "Le ticket n'est pas à vous",
                     data: undefined
-                });
+                }as TApiResponse);
                 console.log(`${req.method} | ${req.originalUrl} | \nLe ticket n'est pas à vous`);
                 return;
             };
@@ -293,30 +295,30 @@ export class ArticlesController
             // message d'erreur pour un article non défini
             if (articles === undefined)
             {
-                res.status(403).json({
-                    status: "FAILED",
+                res.status(404).json({
+                    status: EStatus.FAILED,
                     message: "Il n'y a aucun article",
                     data: undefined
-                });
+                }as TApiResponse);
                 console.log(`${req.method} | ${req.originalUrl} | \nIl n'y a aucun article`);
                 return;
             };
             // message de bonne résolution de la requette
-            res.status(201).json({
-                status: "OK",
+            res.status(200).json({
+                status: EStatus.OK,
                 message: "L'article a été supprimé avec succès",
                 data: articles
-            });
+            }as TApiResponse);
             console.log(`${req.method} | ${req.originalUrl} | \nL'article a été supprimé avec succès`);
         }
         // message d'erreur serveur
         catch (err)
         {
             res.status(500).json({
-                status: "FAILED",
+                status: EStatus.FAILED,
                 message: "Erreur serveur",
                 data: undefined
-            });
+            }as TApiResponse);
         };
     };
 };
