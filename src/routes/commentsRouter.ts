@@ -1,10 +1,13 @@
-//Les Imports
+//Les imports
 import express = require('express');
 import { CommentsController } from '../controllers/commentsController';
 import { authenticateJWT } from '../middleware/auth';
 
 export const commentsRouter = express.Router();
 
+/** 
+ * Appel de la classe "CommentsController":
+*/
 const commentsController = new CommentsController();
 
 commentsRouter.get('/:articleId', commentsController.getAllCommentsByArticleId);
