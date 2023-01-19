@@ -1,18 +1,30 @@
+// Les imports
 import { Request, Response } from "express";
 import { UsersService } from "../services/usersService";
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from 'bcrypt';
 
+/**
+ * Appel de la class 'UsersService'
+ */
 const usersService = new UsersService();
 
+/**
+ * Class UsersController qui va identifier toutes les erreurs, vérifier si c'est le bon utilisateur, appeler les fonctions asynchrones 'login' et 'register'
+ */
 export class UsersController {
 
+    /**
+     * fonction asynchrone qui vérifie si le mot de passe correspond au nom de l'utilisateur
+     * @param req 
+     * @param res 
+     * @returns 
+     */
     async login(req: Request, res: Response) {
 
         const { name, password } = req.body;
 
         // vérifier le nom de l'utilisateur existe
-
         if (name === undefined || typeof name !== typeof String()) {
             res.status(403).json({
                 status: "FAILED.",
@@ -34,8 +46,12 @@ export class UsersController {
             return;
         }
         try {
+            /**
+             * constante user qui appelle la fonction asynchrone 'getUserByName' avec le nom dans la classe 'UsersService'
+             */
             const user = await usersService.getUserByName(name);
             if (user) {
+                //compare les deux mots de passe
                 bcrypt.compare(password, user.password, function (err, result) {
                     const accessToken = jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET!);
                     if (result === true) {
@@ -74,6 +90,12 @@ export class UsersController {
         };
     }
 
+    /**
+     *  fonction asynchrone qui enregistre un nouvel utilisateur en utilisant la fonction asynchrone 'getUserByName' dans la classe 'UsersService' pour vérifier que le nom de l'utilisateur n'existe pas déjà puis crypte le mot de passe avec 'hash' et ajoute le nouvel utilisateur dans la table 'users'
+     * @param req 
+     * @param res 
+     * @returns 
+     */
     async register(req: Request, res: Response) {
         const password: string = req.body.password;
         const name: string = req.body.name;
@@ -88,6 +110,9 @@ export class UsersController {
             return;
         }
 
+        /**
+         * constante qui vérifie si le nom de l'utilisateur n'existe pas déjà en appelant la fonction asynchrone 'getUserByName' dans la classe 'UsersService'
+         */
         const user = await usersService.getUserByName(name);
 
         if(user){
@@ -102,6 +127,9 @@ export class UsersController {
         bcrypt.hash(password, 10, async (err: any, hash: string) => {
             
             try {
+                /**
+                 * constante qui appelle la fonction asynchrone 'addUser' dans la classe 'UsersService'
+                 */
                 const user = await usersService.addUser(name, hash);
                 
                 res.status(201).json({

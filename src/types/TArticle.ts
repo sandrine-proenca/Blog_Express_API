@@ -1,4 +1,6 @@
-
+/**
+ * Table des articles
+ */
 type TArticle = {
     id: number,
     title: string,

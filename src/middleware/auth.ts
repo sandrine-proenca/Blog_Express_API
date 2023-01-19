@@ -5,10 +5,23 @@ import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import * as jwt from 'jsonwebtoken';
 
+/**
+ * authentification du mot de passe
+ * @param req 
+ * @param res 
+ * @param next 
+ */
 export const authenticateJWT = (req: Request, res: Response, next: () => void) => {
     const authHeader = req.headers.authorization;
     if (authHeader) {
+        /**
+         * mot de passe crypté
+         */
         const token = authHeader.split(' ')[1];
+        
+        /**
+         * vérification du mot de passe donné avec celui enregistré
+         */
         jwt.verify(token, process.env.TOKEN_SECRET!, (err: any, token: string | JwtPayload | undefined)=>{
             if (err) {
                 return res.sendStatus(403).json({

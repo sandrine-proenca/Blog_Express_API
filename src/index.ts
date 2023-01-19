@@ -1,4 +1,4 @@
-// imports
+// LES IMPORTS
 import * as dotenv from 'dotenv';
 import express = require('express');
 import { JwtPayload } from 'jsonwebtoken';
@@ -54,12 +54,10 @@ app.use(function (req: express.Request, res: express.Response, next)
 });
 
 /************************************************
-   * Add the route here
-   */
-//app.use('/api/tickets', ticketsRouter);
+   * Add the route here */
 app.use('/api/users', usersRouter);
-app.use('/api/articles', articlesRouter)
-app.use('/api/comments', commentsRouter)
+app.use('/api/articles', articlesRouter);
+app.use('/api/comments', commentsRouter);
 
 // console pour tout autre message d'erreur déjà déclaré
 app.all("*", async (req, res)=>{
@@ -67,7 +65,7 @@ app.all("*", async (req, res)=>{
     
 })
 
-// Bind express server on port 8080
+// Bind express server on port 8000
 app.listen(port, () =>
 {
     console.log(

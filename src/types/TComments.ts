@@ -1,3 +1,6 @@
+/**
+ * Table des commentaires
+ */
 type TComments = {
     id: number,
     message: string,
