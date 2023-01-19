@@ -16,7 +16,7 @@ export class CommentsController {
 
             // aucun message existant pour cet article:
             if (comments === undefined) {
-                res.status(403).json({
+                res.status(404).json({
                     status: EStatus.FAILED,
                     message: "Il n'existe aucun commentaire pour cet article.",
                     data: null
@@ -25,7 +25,7 @@ export class CommentsController {
                 return;
             }
             //il existe un ou des messages pour cet article:
-            res.status(201).json({
+            res.status(200).json({
                 status: EStatus.OK,
                 message: "Un ou des commentaires existent pour cet article.",
                 data: comments
@@ -56,9 +56,9 @@ export class CommentsController {
         // Message d'erreur pour absence de commentaire:
         if (message === undefined || typeof message !== typeof String()) {
 
-            res.status(403).json({
+            res.status(400).json({
                 status: "FAILED.",
-                message: "Il faut écrire un commentaire, et au format string",
+                message: "Il faut écrire un commentaire, et au format string.",
                 data: undefined
             });
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'avoir un commentaire au format string`);
@@ -71,8 +71,8 @@ export class CommentsController {
 
             //message de résolution de la requête:
             res.status(201).json({
-                status: "OK",
-                message: "Votre commentaire a bien été créé",
+                status: "OK.",
+                message: "Votre commentaire a bien été créé.",
                 data: newMessage
             });
         }
@@ -100,9 +100,9 @@ export class CommentsController {
 
         if (!newMessage || !commentId) {
 
-            res.status(403).json({
+            res.status(400).json({
                 status: "FAILED.",
-                message: "Valeurs manquantes",
+                message: "Valeurs manquantes.",
                 data: undefined
             });
             console.log(`${req.method} | ${req.originalUrl} |  \nObligation d'écrire un commentaire ou d'avoir l'id du commentaire`);
@@ -114,10 +114,10 @@ export class CommentsController {
 
             // verifier que ce comment.user_id === req.body.userId
             if (checkComment && checkComment.user_id !== userId) {
-                res.status(404).json(
+                res.status(403).json(
                     {
                         status: "FAILED.",
-                        message: "Modification non-autorisée"
+                        message: "Modification non-autorisée pour cet utilisateur."
                     }
                 )
 
@@ -167,17 +167,17 @@ export class CommentsController {
             {
                 res.status(403).json({
                     status: "FAILED.",
-                    message: "Ce commentaire ne vous appartient pas.",
+                    message: "Ce commentaire n'existe pas ou ne vous appartient pas.",
                     data: undefined
                 });
-                console.log(`${req.method} | ${req.originalUrl} | \nLe ticket n'est pas à vous`);
+                console.log(`${req.method} | ${req.originalUrl} | \nLe commentaire n'est pas à vous`);
                 return;
             };
             //supprime le commentaire existant avec le bon user en appelant le fichier commentsService
             const comment = await commentsService.deleteCommentById(commentId);
 
             //message de bonne supression du commentaire:
-            res.status(201).json({
+            res.status(200).json({
                 status: "OK.",
                 message: "Votre commentaire a été supprimé avec succès.",
                 data: comment
