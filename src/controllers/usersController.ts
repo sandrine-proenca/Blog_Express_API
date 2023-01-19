@@ -16,7 +16,7 @@ export class UsersController {
         if (name === undefined || typeof name !== typeof String()) {
             res.status(403).json({
                 status: "FAILED.",
-                message: "Le nom est invalide ou inexistant.",
+                message: "Ce nom est invalide ou inexistant.",
                 data: undefined
             });
             //console.log(`${req.method} | ${req.originalUrl} | \nLe nom est invalide ou inexistant`);
@@ -27,7 +27,7 @@ export class UsersController {
         if (password === undefined || typeof password !== typeof String()) {
             res.status(403).json({
                 status: "FAILED.",
-                message: "Le mot de passe est invalide.",
+                message: "Ce mot de passe est invalide.",
                 data: undefined
             });
             //console.log(`${req.method} | ${req.originalUrl} |  \nLe mot de passe n\'existe pas`);
@@ -39,7 +39,7 @@ export class UsersController {
                 bcrypt.compare(password, user.password, function (err, result) {
                     const accessToken = jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET!);
                     if (result === true) {
-                        res.status(201).json({
+                        res.status(200).json({
                             status: "OK.",
                             message: "Nom et mot de passe valides.",
                             data: accessToken
@@ -47,7 +47,7 @@ export class UsersController {
                         //console.log(`${req.method} | ${req.originalUrl} |  \nNom et Password valides`);
                     }
                     else {
-                        res.status(404).json({
+                        res.status(403).json({
                             status: "FAILED.",
                             message: "Le mot de passe est invalide.",
                             data: undefined
@@ -58,9 +58,9 @@ export class UsersController {
             }
             else
             {
-                res.status(404).json({
+                res.status(403).json({
                     status: "FAILED.",
-                    message: "cet user existe pas",
+                    message: "Cet utilisateur existe pas",
                     data: undefined
                 });
             }
@@ -82,7 +82,7 @@ export class UsersController {
         {
             res.status(400).json({
                 status: "FAILED.",
-                message: "Structure incorrecte, le champ name ou password n'existe pas"
+                message: "Erreur de synthaxe, veuillez remplir les champs name et password correctement"
             });
 
             return;
@@ -91,9 +91,9 @@ export class UsersController {
         const user = await usersService.getUserByName(name);
 
         if(user){
-            res.status(403).json({
+            res.status(400).json({
                 status: "FAILED.",
-                message: "Cet utilisateur existe déjà, changez de nom."
+                message: "Cet utilisateur existe déjà, changez de nom svp."
             });
 
             return;
@@ -106,7 +106,7 @@ export class UsersController {
                 
                 res.status(201).json({
                     status: "OK.",
-                    message: `Le nom ${name} et son mot de passe associé sont valides.`,
+                    message: `Le nom ${name} et le mot de passe associé ont bien été créés.`,
                     data: user
                 });
                 //console.log(`${req.method} | ${req.originalUrl} |  \nLe nom: ${name} et son mot de passe associé sont valides`);
