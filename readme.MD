@@ -6,68 +6,69 @@ install dependencies
 start dev server
 `npm start`
 
-BLOG_EXPRESS_API
+# BLOG_EXPRESS_API .DOC
 
-    .DOC
 
-    Utilisateurs:
 
-        ENREGISTRER:
-        `/api/users/register`
+## UTILISATEURS:
+
+## Enregistrer:
+###    `/api/users/register`
         Créer un nouvel utilisateur
 
-        IDENTIFICATION:
-        `/api/users/login`
+## Identifier:
+###     `/api/users/login`
         Identifier un utilisateur
     
-    -> CORPS: {name: string, password: string}
+### CORPS: {name: string, password: string}
 
 
-    Articles:
 
-        OBTENTION:
-        `/api/articles`
+# ARTICLES:
+
+## Obtention:
+###     `/api/articles`
         Afficher tous les articles
-        `/api/articles/:id`
+###     `/api/articles/:id`
         Afficher un article déterminé
-        -> CORPS: {id: number}
+###     CORPS: {id: number}
 
-        CREATION:
-        `/api/articles`
+## Création:
+###     `/api/articles`
         Poster un nouvel article
-        -> CORPS: {title: string, chronicle: string, user_id: number}
+###     CORPS: {title: string, chronicle: string, user_id: number}
 
-        RECTIFICATION:
-        `/api/articles`
+## Rectification:
+###     `/api/articles`
         Modifier un article déterminé
-        -> CORPS: {id: number, title: string, chronicle: string}
+###     CORPS: {id: number, title: string, chronicle: string}
 
-        SUPPRESSION:
-        `/api/articles/:id`
+## Suppression:
+###     `/api/articles/:id`
         supprimer un article déterminé
-        -> CORPS: {id: number}
+###     CORPS: {id: number}
 
     
 
 
-    Commentaires:
+# COMMENTAIRES:
 
-        OBTENTION:
-        `/api/comments/:articleId`
+## Obtention:
+###     `/api/comments/:articleId`
         Afficher tous les commentaires d'un article
-        -> CORPS: {commentId: number, articleId: number}
+###     CORPS: {commentId: number, articleId: number}
 
-        CREATION:
-        `/api/comments`
+## Création:
+###     `/api/comments`
         Poster un nouveau commentaire
-        -> CORPS: {message: string, articleId:number, userId: number}
+###     CORPS: {message: string, articleId:number, userId: number}
 
-        RECTIFICATION:
-        `/api/comments`
+## Rectification:
+###     `/api/comments`
         Modifier un commentaire déterminé
-        -> CORPS: {id: number, message: string}
+###     CORPS: {id: number, message: string}
 
-        SUPPRESSION:
-        `/api/comments/:id`
+## Suppression:
+###     `/api/comments/:id`
         supprimer un commentaire déterminé
-        -> CORPS: {id: number}
+###     CORPS: {id: number}
