@@ -20,7 +20,7 @@ start dev server
 ###     `/api/users/login`
         Identifier un utilisateur
     
-### CORPS: {name: string, password: string}
+**CORPS: {name: string, password: string}** 
 
 
 
@@ -31,22 +31,22 @@ start dev server
         Afficher tous les articles
 ###     `/api/articles/:id`
         Afficher un article déterminé
-###     CORPS: {id: number}
+**CORPS: {id: number}**    
 
 ## Création:
 ###     `/api/articles`
         Poster un nouvel article
-###     CORPS: {title: string, chronicle: string, user_id: number}
+        **CORPS: {title: string, chronicle: string, user_id: number}**
 
 ## Rectification:
 ###     `/api/articles`
         Modifier un article déterminé
-###     CORPS: {id: number, title: string, chronicle: string}
+        **CORPS: {id: number, title: string, chronicle: string}**
 
 ## Suppression:
 ###     `/api/articles/:id`
         supprimer un article déterminé
-###     CORPS: {id: number}
+        **CORPS: {id: number}**
 
     
 
@@ -56,19 +56,19 @@ start dev server
 ## Obtention:
 ###     `/api/comments/:articleId`
         Afficher tous les commentaires d'un article
-###     CORPS: {commentId: number, articleId: number}
+        **CORPS: {commentId: number, articleId: number}**
 
 ## Création:
 ###     `/api/comments`
         Poster un nouveau commentaire
-###     CORPS: {message: string, articleId:number, userId: number}
+        **CORPS: {message: string, articleId:number, userId: number}**
 
 ## Rectification:
 ###     `/api/comments`
         Modifier un commentaire déterminé
-###     CORPS: {id: number, message: string}
+        **CORPS: {id: number, message: string}**
 
 ## Suppression:
 ###     `/api/comments/:id`
         supprimer un commentaire déterminé
-###     CORPS: {id: number}
+        **CORPS: {id: number}**
